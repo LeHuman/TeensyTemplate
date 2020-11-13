@@ -1,0 +1,207 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "process",
+            "detail": "Compile project",
+            "presentation": {
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "build"
+            ],
+            "options": {
+                "statusbar": {
+                    "label": "$(database)"
+                }
+            }
+        },
+        {
+            "label": "Configure",
+            "type": "process",
+            "detail": "Configure the CMake project",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "config",
+                "\"-DTOOLCHAIN_OFFSET:STRING=${config:TOOLCHAIN_OFFSET} ${config:ADDITIONAL_CMAKE_VARS}\""
+            ],
+            "options": {
+                "statusbar": {
+                    "hide": true
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Hard Clean",
+            "type": "process",
+            "detail": "Clean up entire CMake project",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "hard_clean",
+                "\"-DTOOLCHAIN_OFFSET:STRING=${config:TOOLCHAIN_OFFSET} ${config:ADDITIONAL_CMAKE_VARS}\""
+            ],
+            "options": {
+                "statusbar": {
+                    "hide": true
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Upload",
+            "type": "process",
+            "detail": "Upload compiled binary to teensy",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "upload",
+                "${input:TEENSY_USB_PORTNAME}"
+            ],
+            "options": {
+                "statusbar": {
+                    "label": "$(zap)"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Monitor",
+            "type": "shell",
+            "detail": "Monitor teensy over a CLI",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "command": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/ComMonitor.exe",
+            "args": [
+                "${input:TEENSY_USB_PORTNAME}",
+                "${input:TEENSY_BAUDRATE}",
+                "-t${input:TEENSY_COM_TYPE}",
+                "-r",
+            ],
+            "options": {
+                "statusbar": {
+                    "label": "$(terminal)"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Shebang",
+            "type": "shell",
+            "detail": "Run all tasks required to program teensy",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build",
+                "Upload",
+                "Monitor"
+            ],
+            "options": {
+                "statusbar": {
+                    "label": "$(flame)"
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean",
+            "type": "process",
+            "detail": "Clean up build files",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "clean"
+            ],
+            "options": {
+                "statusbar": {
+                    "label": "$(refresh)"
+                }
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "TEENSY_COM_TYPE",
+            "description": "What type of data the monitor should expect",
+            "type": "pickString",
+            "options": [
+                "Ascii",
+                "Hex",
+                "Decimal",
+                "Binary",
+            ],
+            "default": "Ascii"
+        },
+        {
+            "id": "TEENSY_USB_PORTNAME",
+            "description": "What portname the moniter should use",
+            "type": "pickString",
+            "options": [
+                "COM6",
+                "COM7"
+            ],
+            "default": "COM6"
+        },
+        {
+            "id": "TEENSY_BAUDRATE",
+            "description": "What standard baudrate the moniter should use",
+            "type": "pickString",
+            "options": [
+                "1200",
+                "2400",
+                "4800",
+                "9600",
+                "19200",
+                "38400",
+                "57600",
+                "115200",
+                "230400",
+                "460800",
+                "921600"
+            ],
+            "default": "115200"
+        }
+    ]
+}
