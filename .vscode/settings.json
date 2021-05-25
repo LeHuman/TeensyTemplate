@@ -2,7 +2,7 @@
     "TEENSY_ECU": "MK66FX1M0",
     "TOOLCHAIN_OFFSET": "../TeensyToolchain",
     "TEENSY_BAUDRATE": "115200",
-    "TEENSY_PORT": "COM6",
+    "TEENSY_PORT": "COM9",
     // "ADDITIONAL_CMAKE_VARS": "-DCUSTOM_BUILD_PATH_PREFIX:STRING=build/Pre_Build/",
     "ADDITIONAL_CMAKE_VARS": "" ,
     "files.associations": {
