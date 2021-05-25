@@ -17,12 +17,26 @@
             "args": [
                 "/d",
                 "/c",
-                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
-                "build"
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                "build",
+                "${config:ADDITIONAL_CMAKE_VARS}"
             ],
             "options": {
                 "statusbar": {
-                    "label": "$(database)"
+                    "label": "$(file-binary)",
+                    "color": "#1ba82e"
+                }
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "pattern": {
+                    // "regexp": "^(?:Pre_Build\/)?(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "regexp": "^Pre_Build\/(.*?):(\\d+):(\\d*):?\\s+(?:fatal\\s+)?(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
                 }
             }
         },
@@ -38,9 +52,9 @@
             "args": [
                 "/d",
                 "/c",
-                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py",
                 "config",
-                "\"-DTOOLCHAIN_OFFSET:STRING=${config:TOOLCHAIN_OFFSET} ${config:ADDITIONAL_CMAKE_VARS}\""
+                "${config:ADDITIONAL_CMAKE_VARS}"
             ],
             "options": {
                 "statusbar": {
@@ -50,7 +64,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Hard Clean",
+            "label": "Reset",
             "type": "process",
             "detail": "Clean up entire CMake project",
             "presentation": {
@@ -61,9 +75,9 @@
             "args": [
                 "/d",
                 "/c",
-                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
-                "hard_clean",
-                "\"-DTOOLCHAIN_OFFSET:STRING=${config:TOOLCHAIN_OFFSET} ${config:ADDITIONAL_CMAKE_VARS}\""
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                "reset",
+                "${config:ADDITIONAL_CMAKE_VARS}"
             ],
             "options": {
                 "statusbar": {
@@ -84,13 +98,14 @@
             "args": [
                 "/d",
                 "/c",
-                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py",
                 "upload",
-                "${input:TEENSY_USB_PORTNAME}"
+                "${config:TEENSY_PORT}"
             ],
             "options": {
                 "statusbar": {
-                    "label": "$(zap)"
+                    "label": "$(circuit-board)",
+                    "color": "#e6d925"
                 }
             },
             "problemMatcher": []
@@ -103,40 +118,78 @@
                 "panel": "shared",
                 "showReuseMessage": false
             },
-            "command": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/ComMonitor.exe",
+            "command": "cmd.exe",
             "args": [
-                "${input:TEENSY_USB_PORTNAME}",
-                "${input:TEENSY_BAUDRATE}",
+                "/d",
+                "/c",
+                "${workspaceFolder}\\${config:TOOLCHAIN_OFFSET}\\tools\\ComMonitor.exe",
+                "${config:TEENSY_PORT}",
+                "${config:TEENSY_BAUDRATE}",
                 "-t${input:TEENSY_COM_TYPE}",
+                "-m8",
+                "--jsonPath",
+                "${workspaceFolder}\\log_lookup.json",
                 "-r",
+                "-w",
             ],
             "options": {
                 "statusbar": {
-                    "label": "$(terminal)"
+                    "label": "$(terminal)",
+                    "color": "#000000"
                 }
             },
             "problemMatcher": []
         },
         {
-            "label": "Shebang",
+            "label": "Monitor Raw",
             "type": "shell",
-            "detail": "Run all tasks required to program teensy",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Build",
-                "Upload",
-                "Monitor"
+            "detail": "Monitor teensy hex values over a CLI",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}\\${config:TOOLCHAIN_OFFSET}\\tools\\ComMonitor.exe",
+                "${config:TEENSY_PORT}",
+                "${config:TEENSY_BAUDRATE}",
+                "-tH",
+                "-m8",
+                "-r",
+                "-w",
             ],
             "options": {
                 "statusbar": {
-                    "label": "$(flame)"
+                    "hide": true
                 }
             },
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "problemMatcher": []
+        },
+        {
+            "label": "Disable Teensy",
+            "type": "process",
+            "detail": "Put teensy in programming mode",
+            "presentation": {
+                "panel": "shared",
+                "showReuseMessage": false,
+                "reveal": "silent"
+            },
+            "command": "cmd.exe",
+            "args": [
+                "/d",
+                "/c",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                "disable",
+                "${config:TEENSY_PORT}"
+            ],
+            "options": {
+                "statusbar": {
+                    "hide": true
+                }
+            },
+            "problemMatcher": []
         },
         {
             "label": "Clean",
@@ -150,58 +203,16 @@
             "args": [
                 "/d",
                 "/c",
-                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.bat",
+                "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py",
                 "clean"
             ],
             "options": {
                 "statusbar": {
-                    "label": "$(refresh)"
+                    "label": "$(refresh)",
+                    "color": "#e62525"
                 }
             },
             "problemMatcher": []
-        }
-    ],
-    "inputs": [
-        {
-            "id": "TEENSY_COM_TYPE",
-            "description": "What type of data the monitor should expect",
-            "type": "pickString",
-            "options": [
-                "Ascii",
-                "Hex",
-                "Decimal",
-                "Binary",
-            ],
-            "default": "Ascii"
-        },
-        {
-            "id": "TEENSY_USB_PORTNAME",
-            "description": "What portname the moniter should use",
-            "type": "pickString",
-            "options": [
-                "COM6",
-                "COM7"
-            ],
-            "default": "COM6"
-        },
-        {
-            "id": "TEENSY_BAUDRATE",
-            "description": "What standard baudrate the moniter should use",
-            "type": "pickString",
-            "options": [
-                "1200",
-                "2400",
-                "4800",
-                "9600",
-                "19200",
-                "38400",
-                "57600",
-                "115200",
-                "230400",
-                "460800",
-                "921600"
-            ],
-            "default": "115200"
         }
     ]
 }
