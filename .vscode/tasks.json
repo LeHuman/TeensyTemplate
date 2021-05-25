@@ -235,5 +235,19 @@
             },
             "problemMatcher": []
         }
+    ],
+    "inputs": [
+        {
+            "id": "TEENSY_COM_TYPE",
+            "description": "What type of data the monitor should expect",
+            "type": "pickString",
+            "options": [
+                "Ascii",
+                "Hex",
+                "Decimal",
+                "Binary",
+            ],
+            "default": "Hex"
+        }
     ]
 }
