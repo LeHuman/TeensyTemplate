@@ -1,4 +1,3 @@
-# set(TOOLCHAIN_OFFSET "../TeensyToolchain")
 include("${TOOLCHAIN_OFFSET}/tools/toolchain.cmake")
 #-DCUSTOM_BUILD_PATH_PREFIX:STRING= #Can be used for some sketchy pre-build Stuff if needed
 
@@ -25,7 +24,7 @@ set(SOURCE_PATH ${CUSTOM_BUILD_PATH_PREFIX}src CACHE INTERNAL "")
 add_compile_definitions(USB_SERIAL LAYOUT_US_ENGLISH __${TEENSY_CORE_NAME}__)
 add_compile_definitions(_GNU_SOURCE TEENSYDUINO=144 F_CPU=${TEENSY_CORE_SPEED} USING_MAKEFILE)
 
-add_compile_options(-Wall -g -mthumb -ffunction-sections -fdata-sections -nostdlib -MMD) #-O3
+add_compile_options(-Wall -g -mthumb -ffunction-sections -fdata-sections -nostdlib -MMD -O3)
 add_compile_options(-mcpu=${TEENSY_CPU} -mfloat-abi=hard -mfpu=fpv4-sp-d16) #Make teensy specific
 set(LINKER_LIBS "-lm -larm_cortexM4lf_math -lstdc++")
 set(LINKER_LIBS "-Wl,--gc-sections -mthumb -mcpu=${TEENSY_CPU} -mfloat-abi=hard -mfpu=fpv4-sp-d16")
@@ -59,9 +58,9 @@ file(GLOB_RECURSE C_CXX_BUILD_FILES ${CORE_PATH}/*.cpp)
 
 add_library(core ${C_C_BUILD_FILES} ${C_CXX_BUILD_FILES})
 target_include_directories(core PUBLIC ${CORE_PATH})
-add_library(libraries ${L_C_BUILD_FILES} ${L_CXX_BUILD_FILES})
-target_include_directories(libraries PUBLIC ${CORE_PATH} ${LIBRARY_INCLUDE})
-target_link_libraries(libraries core)
+add_library(libraries INTERFACE)
+target_sources(libraries INTERFACE ${L_C_BUILD_FILES} ${L_CXX_BUILD_FILES})
+target_link_libraries(libraries INTERFACE core)
 
 set(SOURCES ${S_C_BUILD_FILES} ${S_CXX_BUILD_FILES} CACHE INTERNAL "")
 add_executable(${PROJECT_NAME} ${SOURCES})
