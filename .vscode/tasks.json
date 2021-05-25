@@ -192,6 +192,27 @@
             "problemMatcher": []
         },
         {
+            "label": "Shebang",
+            "detail": "Run all tasks required to program teensy",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build",
+                "Upload",
+                "Monitor"
+            ],
+            "options": {
+                "statusbar": {
+                    "label": "$(rocket)",
+                    "color": "#e67c25"
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "Clean",
             "type": "process",
             "detail": "Clean up build files",
