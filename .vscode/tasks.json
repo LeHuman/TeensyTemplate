@@ -247,7 +247,7 @@
                 "Decimal",
                 "Binary",
             ],
-            "default": "Hex"
+            "default": "Ascii"
         }
     ]
 }
