@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include "Example.h"
 
 int main(void) {
     pinMode(13, OUTPUT);
@@ -9,7 +10,7 @@ int main(void) {
         delay(500);
         static bool on = true;
         digitalWriteFast(13, (on = !on));
-        Serial.printf("Hello %d", millis());
+        Serial.printf("Hello %d", example());
     }
     return 0;
 }
