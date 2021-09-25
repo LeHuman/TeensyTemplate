@@ -23,10 +23,11 @@ Rename the downloaded folder from `TeensyToolchain-master` to `TeensyToolchain`
 Alternatively, you can modify `TOOLCHAIN_OFFSET` inside `.vscode/settings.json` in order to tell the project where the toolchain is. The path must be relative.
 
 Install the Latest Release version of [CMake](https://cmake.org/download/)
+Make sure to select the add CMake to path option when installing.
 
 As of today, that would be version 3.18.4
 
-Inside `.vscode/tasks.json`, modify the options for `TEENSY_USB_PORTNAME` for the ports that the project should use to connect to your teensy. ( Set to COM6 by default )
+Inside `.vscode/settings.json`, modify the options for `TEENSY_USB_PORTNAME` for the ports that the project should use to connect to your teensy. ( Set to COM9 by default )
 
 You can also modify the defaults for other tasks.
 
