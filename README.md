@@ -43,7 +43,7 @@ Put any libraries you need in `libraries`
 ### VSCode Tasks
 
 * `Clean`: Clean up build files
-* `Hard Clean`: Clean up entire CMake project
+* `Reset`: Clean up entire CMake project
 * `Build`: Compile project
 * `Upload`: Upload compiled binary to teensy
 * `Monitor`: Monitor teensy over a CLI, select the appropriate options when running, defaults to `ASCII` mode
