@@ -17,7 +17,10 @@
             "args": [
                 "/d",
                 "/c",
-                "${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                {
+                    "quoting": "weak",
+                    "value": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py"
+                },
                 "build",
                 "${config:ADDITIONAL_CMAKE_VARS}"
             ],
@@ -51,7 +54,10 @@
             "args": [
                 "/d",
                 "/c",
-                "${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                {
+                    "quoting": "weak",
+                    "value": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py"
+                },
                 "config",
                 "${config:ADDITIONAL_CMAKE_VARS}"
             ],
@@ -74,7 +80,10 @@
             "args": [
                 "/d",
                 "/c",
-                "${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                {
+                    "quoting": "weak",
+                    "value": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py"
+                },
                 "reset",
                 "${config:ADDITIONAL_CMAKE_VARS}"
             ],
@@ -97,7 +106,10 @@
             "args": [
                 "/d",
                 "/c",
-                "${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                {
+                    "quoting": "weak",
+                    "value": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py"
+                },
                 "upload",
                 "${config:TEENSY_PORT}"
             ],
@@ -179,7 +191,10 @@
             "args": [
                 "/d",
                 "/c",
-                "${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                {
+                    "quoting": "weak",
+                    "value": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py"
+                },
                 "disable",
                 "${config:TEENSY_PORT}"
             ],
@@ -223,7 +238,10 @@
             "args": [
                 "/d",
                 "/c",
-                "${config:TOOLCHAIN_OFFSET}/tools/config.py",
+                {
+                    "quoting": "weak",
+                    "value": "${workspaceFolder}/${config:TOOLCHAIN_OFFSET}/tools/config.py"
+                },
                 "clean"
             ],
             "options": {
